@@ -16,8 +16,6 @@ main = do
     prog <- readFile (Prelude.head args)
     case parser prog of
       (Left e) -> print e
-      (Right t) -> do
-        putStrLn ("tape: |" ++ intercalate "|" (run et (read (args !! 1))) ++ " ...")
-          where
-            et = elaborator t
-            cx = context et
+      (Right t) -> putStrLn ("tape: |" ++ intercalate "|" tape ++ " ...")
+        where
+          tape = run (elaborator t) (read (args !! 1))
