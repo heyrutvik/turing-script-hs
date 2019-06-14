@@ -25,9 +25,9 @@ evenExec t = case t of
     expand' acc (Exec e1 : Exec e2 : rest) = case (e1, e2) of
       (Effect _, Effect _) -> expand' (Exec e2 : Exec (Move N) : acc) rest
       (Effect _, Move _) -> expand' (Exec e1 : Exec e2 : acc) rest
-      (Move _, Effect _) -> expand' (Exec OnTheFly : Exec e1 : Exec e2 : Exec (Move N) : acc) rest
-      (Move _, Move _) -> expand' (Exec OnTheFly : Exec e1 : Exec OnTheFly : Exec e2 : acc) rest
-    expand' acc [Exec e1]= case e1 of
+      (Move _, Effect _) -> expand' (Exec e2 : Exec (Move N) : Exec OnTheFly : Exec e1 : acc) rest -- adds in reverse to group later
+      (Move _, Move _) -> expand' (Exec OnTheFly : Exec e2 : Exec OnTheFly : Exec e1 : acc) rest -- adds in reverse to group later
+    expand' acc [Exec e1] = case e1 of
       Effect _ -> Exec e1 : Exec (Move N) : acc
       Move _ -> Exec OnTheFly : Exec e1 : acc
     expand' acc _ = acc
